@@ -1,0 +1,72 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      GTF_ENV: production
+      GTF_HOST: 0.0.0.0
+      GTF_PORT: "8000"
+      GTF_DATABASE_URL: postgresql+asyncpg://gtf:${POSTGRES_PASSWORD}@db:5432/gtf
+      GTF_SESSION_COOKIE_SECURE: "${GTF_SESSION_COOKIE_SECURE:-true}"
+      GTF_FRONTEND_URL: ${GTF_PUBLIC_URL:-http://localhost:8000}
+      GTF_FRAME_CACHE_DIR: /app/data/frames
+      TZ: ${TZ:-Europe/Paris}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${GTF_HTTP_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - gtf_data:/app/data
+      - gtf_frames:/app/data/frames
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 25s
+      retries: 3
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gtf
+      POSTGRES_USER: gtf
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - gtf_db:/var/lib/postgresql/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gtf -d gtf"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # Never publish PostgreSQL on the host or the Internet.
+    expose:
+      - "5432"
+
+volumes:
+  gtf_data:
+  gtf_frames:
+  gtf_db:

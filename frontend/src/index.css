@@ -1,0 +1,201 @@
+@import '@fontsource/bebas-neue';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --color-ink-950: #070709;
+  --color-ink-900: #0b0b0e;
+  --color-ink-850: #101014;
+  --color-ink-800: #16161c;
+  --color-ink-700: #1e1e26;
+  --color-ink-600: #2a2a34;
+
+  --color-cream-50: #f6f3ec;
+  --color-cream-100: #efece5;
+  --color-cream-300: #cdc8bd;
+
+  --color-sand-400: #a8a296;
+  --color-sand-500: #8b867b;
+
+  --color-gold-300: #f0d194;
+  --color-gold-400: #d9b76f;
+  --color-gold-500: #c19a4f;
+  --color-gold-600: #9a7836;
+  --color-on-accent: #070709;
+
+  --color-success-400: #7fc79d;
+  --color-danger-400: #e27a6d;
+}
+
+:root {
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --gtf-panel-bg: rgba(16, 16, 20, 0.82);
+  --gtf-panel-border: color-mix(in srgb, var(--color-cream-100) 9%, transparent);
+  --gtf-grain-opacity: 0.035;
+  --gtf-vignette: radial-gradient(
+    ellipse at center,
+    transparent 35%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  --gtf-spotlight:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(217, 183, 111, 0.13), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 85% 15%, rgba(193, 154, 79, 0.07), transparent 70%);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --color-ink-950: #f4f1e9;
+  --color-ink-900: #fffdf8;
+  --color-ink-850: #fbf8f1;
+  --color-ink-800: #efe9dd;
+  --color-ink-700: #e1d9c9;
+  --color-ink-600: #cfc5b2;
+
+  --color-cream-50: #14120e;
+  --color-cream-100: #1f1c16;
+  --color-cream-300: #4b4438;
+
+  --color-sand-400: #625b4f;
+  --color-sand-500: #7d7567;
+
+  --color-gold-300: #8a5f14;
+  --color-gold-400: #9a6f1f;
+  --color-gold-500: #7c5815;
+  --color-gold-600: #5e4210;
+  --color-on-accent: #fffdf7;
+
+  --color-success-400: #2f7a50;
+  --color-danger-400: #b23a2e;
+
+  --gtf-panel-bg: rgba(255, 253, 248, 0.9);
+  --gtf-panel-border: rgba(31, 28, 22, 0.11);
+  --gtf-grain-opacity: 0.018;
+  --gtf-vignette: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(80, 70, 50, 0.07) 100%
+  );
+  --gtf-spotlight:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(154, 111, 31, 0.1), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 85% 15%, rgba(193, 154, 79, 0.05), transparent 70%);
+}
+
+html {
+  background: var(--color-ink-950);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100svh;
+  background: var(--color-ink-950);
+  color: var(--color-cream-100);
+  font-family: var(--font-sans);
+}
+
+#root {
+  min-height: 100svh;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-gold-400) 30%, transparent);
+  color: var(--color-cream-50);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-400);
+  outline-offset: 3px;
+}
+
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: var(--gtf-grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.vignette::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: var(--gtf-vignette);
+}
+
+.spotlight {
+  background: var(--gtf-spotlight);
+}
+
+.panel {
+  border: 1px solid var(--gtf-panel-border);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.035), transparent 45%),
+    var(--gtf-panel-bg);
+  backdrop-filter: blur(18px);
+}
+
+.hairline {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-gold-400) 35%, transparent),
+    transparent
+  );
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.animate-rise-delay {
+  animation: rise 0.65s 0.12s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.animate-rise-delay-2 {
+  animation: rise 0.65s 0.24s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* The desktop UI is designed to match the 120% zoom used by the user. */
+@media (min-width: 1024px) {
+  html {
+    font-size: 120%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
